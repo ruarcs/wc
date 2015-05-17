@@ -1,0 +1,27 @@
+This program is a simple wordcount-style utility that generates statistics
+about a file provided. The output is given in the format:
+
+words: <number of words, where "words" are space-separated>
+lines: <number of lines>
+average letters per word: <average number of letters (upper or lower case ASCII) per word>
+most common letter: <most commonly occuring letter (upper or lower case ASCII), given as lower case equivalent>
+
+NOTES:
+* The latter two statistics analyse letters, not raw characters, i.e. in the string "Foo.Bar.Bar", 
+  the "most common" letters are [o, a, r], not the character '.'
+
+* Most common letter is calculated by viewing 'A' and 'a' as equivalent.
+
+BUILDING:
+* The simplest way to build is to run "ant build".
+
+TESTING:
+* Tests can be run by calling "ant test".
+
+RUNNING:
+* On a *nix system, the simplest way to run is to call the included bash script, using:
+          ./mywc.sh <filepath>
+  This will build the project if necessary and run the utility.
+
+* Alternatively the jar file "MyWC.jar" can be run using:
+          java -jar MyWC.jar <filepath>
