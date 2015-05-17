@@ -12,6 +12,8 @@ NOTES:
 
 * Most common letter is calculated by viewing 'A' and 'a' as equivalent.
 
+* If more than one letter occur N times, we provide a list of the most frequently occuring letters.
+
 BUILDING:
 * The simplest way to build is to run "ant build".
 
