@@ -1,15 +1,9 @@
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -26,8 +20,7 @@ public class MyWC {
 	private Set<Character> mostCommonLetters = new HashSet<>();
 
 	private int totalLetterCount;
-
-	private long[] letterCountArrays;
+	private long[] letterCountArrays = new long[26];
 	
 	public static void main(String[] args) throws IOException
 	{
@@ -78,20 +71,27 @@ public class MyWC {
 		totalLetterCount = 0;
 		letterCountArrays = new long[26];
 		
-		String currentLine;
-		Stream<String> words;
-		// Gather all statistical data, including line and word count.
-		try( BufferedReader bufferedReader = new BufferedReader( new FileReader( file ) ) )
+		try( Stream<String> lines = Files.lines( file.toPath() ) )
 		{
-			while( ( currentLine = bufferedReader.readLine() ) != null )
-			{
-				lineCount++;
-				words = Pattern.compile( "\\s" ).splitAsStream( currentLine );
+			lineCount = lines.count();	
+			lines.forEach( line -> {
+				Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
 				// We now have the words as a stream of Strings.
 				// For each word now need to count, and see what chars are in it.
 				wordCount += words.count();
-				words.forEach( this::analyseWord );
-			}
+				words.forEach( word -> {
+					IntStream chars = word.chars();
+					totalLetterCount += chars.count();
+					chars.forEach( character -> {
+		        		int countArrayIndex;
+		        		if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
+		        		{
+		        			totalLetterCount++;
+		        			letterCountArrays[ countArrayIndex ]++;
+		        		}
+		        	} );
+		    	} );
+			} );
 		}
 		
 		// Calculate the average number of letters (not *characters*) in words.
@@ -99,23 +99,6 @@ public class MyWC {
 		
 		// Calculate the most common letter (not *character*) in the file.
 		calculateMostCommonLetters( letterCountArrays );
-	}
-	
-	private void analyseWord( String word )
-	{
-		IntStream chars = word.chars();
-		totalLetterCount += chars.count();
-		chars.forEach(this::analyseChar);
-	}
-	
-	private void analyseChar( int character )
-	{
-		int countArrayIndex;
-		if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
-		{
-			totalLetterCount++;
-			letterCountArrays[ countArrayIndex ]++;
-		}
 	}
 	
 	/**
@@ -199,7 +182,7 @@ public class MyWC {
 	// Getters for private member variables to allow statistics to be fetched programmatically.
 	///////////////////////////////////////////////////////////////////////////////////////////
 	
-	public int getLineCount()
+	public long getLineCount()
 	{
 		return lineCount;
 	}
