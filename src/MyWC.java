@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class MyWC {
@@ -20,7 +19,7 @@ public class MyWC {
 	private Set<Character> mostCommonLetters = new HashSet<>();
 
 	private int totalLetterCount;
-	private long[] letterCountArrays = new long[26];
+	private long[] letterCountArrays = new long[ 'z' - 'a' ];;
 	
 	public static void main(String[] args) throws IOException
 	{
@@ -57,7 +56,7 @@ public class MyWC {
 		System.out.println( "words: " + wordCount );
 		System.out.println( "lines: " + lineCount );
 		System.out.println( "average letters per word: " + averageLettersPerWord );
-		System.out.println( "most common letter: " + getFormattedList(mostCommonLetters ));
+		System.out.println( "most common letter: " + Utils.getFormattedList(mostCommonLetters ));
 	}
 	
 	/**
@@ -68,9 +67,6 @@ public class MyWC {
 	 */
 	public void calculateStatistics() throws FileNotFoundException, IOException
 	{
-		totalLetterCount = 0;
-		letterCountArrays = new long[26];
-		
 		try( Stream<String> lines = Files.lines( file.toPath() ) )
 		{
 			lines.forEach( line -> {
@@ -156,24 +152,6 @@ public class MyWC {
 		}
 		// A negative value means that the character provided was not a letter.
 		return -1;
-	}
-	
-	
-	// Similar to "toString" method of HashSet class, but do not prepend/append '['/']'
-	private static <X> String getFormattedList( Set<Character> mostCommonLetters )
-	{
-		if( mostCommonLetters.isEmpty() )
-		{
-			return "";
-		}
-		StringBuilder stringBuilder = new StringBuilder();
-		for( char c : mostCommonLetters )
-		{
-			stringBuilder.append( c ).append(',');
-		}
-		// Comma-separate values, not not after the final character.
-		stringBuilder.setLength( stringBuilder.length() - 1 );
-		return stringBuilder.toString();
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////
