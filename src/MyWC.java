@@ -77,14 +77,14 @@ public class MyWC {
 				words.forEach( word -> {
 					wordCount++;
 					word.chars().forEach( character -> {
-		        		int countArrayIndex;
-		        		if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
-		        		{
-		        			totalLetterCount++;
-		        			letterCountArrays[ countArrayIndex ]++;
-		        		}
-		        	} );
-		    	} );
+						int countArrayIndex;
+						if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
+						{
+							totalLetterCount++;
+							letterCountArrays[ countArrayIndex ]++;
+						}
+					} );
+				} );
 			} );
 		}
 		
