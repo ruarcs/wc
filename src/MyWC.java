@@ -1,13 +1,11 @@
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Files;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class MyWC {
 
@@ -15,10 +13,13 @@ public class MyWC {
 	private final File file;
 	
 	// The statistics about the file.
-	private int lineCount;
+	private long lineCount;
 	private int wordCount;
 	private double averageLettersPerWord;
 	private Set<Character> mostCommonLetters = new HashSet<>();
+
+	private int totalLetterCount;
+	private long[] letterCountArrays = new long[ 'z' - 'a' ];;
 	
 	public static void main(String[] args) throws IOException
 	{
@@ -55,7 +56,7 @@ public class MyWC {
 		System.out.println( "words: " + wordCount );
 		System.out.println( "lines: " + lineCount );
 		System.out.println( "average letters per word: " + averageLettersPerWord );
-		System.out.println( "most common letter: " + getFormattedList(mostCommonLetters ));
+		System.out.println( "most common letter: " + Utils.getFormattedList(mostCommonLetters ));
 	}
 	
 	/**
@@ -66,45 +67,32 @@ public class MyWC {
 	 */
 	public void calculateStatistics() throws FileNotFoundException, IOException
 	{
-		int totalLetterCount = 0;
-		//An array used to keep count of number of occurrences of a letter (avoid using hash table etc.)
-		long[] letterCountArray = new long[26];
-		
-		String currentLine;
-		String[] words;
-		int countArrayIndex;
-		
-		// Gather all statistical data, including line and word count.
-		try( BufferedReader bufferedReader = new BufferedReader( new FileReader( file ) ) )
+		try( Stream<String> lines = Files.lines( file.toPath() ) )
 		{
-			while( ( currentLine = bufferedReader.readLine() ) != null )
-			{
+			lines.forEach( line -> {
 				lineCount++;
-				words = currentLine.split( " " );
-				for( String word : words )
-				{
-					if( !word.isEmpty() )
-					{
-						wordCount++;
-						for( char c : word.toCharArray() )
-						{
-							if( (countArrayIndex = getCountArrayIndex( c ) ) >= 0 )
-							{
-								totalLetterCount++;
-								letterCountArray[ countArrayIndex ]++;
-							}
-						}
-					}
-				}
-				
-			}
+				Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
+				// We now have the words as a stream of Strings.
+				// For each word now need to count, and see what chars are in it.
+				words.forEach( word -> {
+					wordCount++;
+					word.chars().forEach( character -> {
+		        		int countArrayIndex;
+		        		if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
+		        		{
+		        			totalLetterCount++;
+		        			letterCountArrays[ countArrayIndex ]++;
+		        		}
+		        	} );
+		    	} );
+			} );
 		}
 		
 		// Calculate the average number of letters (not *characters*) in words.
 		averageLettersPerWord = wordCount != 0 ? ((double)totalLetterCount)/((double)wordCount) : 0.0;
 		
 		// Calculate the most common letter (not *character*) in the file.
-		calculateMostCommonLetters( letterCountArray );
+		calculateMostCommonLetters( letterCountArrays );
 	}
 	
 	/**
@@ -166,29 +154,11 @@ public class MyWC {
 		return -1;
 	}
 	
-	
-	// Similar to "toString" method of HashSet class, but do not prepend/append '['/']'
-	private static <X> String getFormattedList( Set<Character> mostCommonLetters )
-	{
-		if( mostCommonLetters.isEmpty() )
-		{
-			return "";
-		}
-		StringBuilder stringBuilder = new StringBuilder();
-		for( char c : mostCommonLetters )
-		{
-			stringBuilder.append( c ).append(',');
-		}
-		// Comma-separate values, not not after the final character.
-		stringBuilder.setLength( stringBuilder.length() - 1 );
-		return stringBuilder.toString();
-	}
-	
 	///////////////////////////////////////////////////////////////////////////////////////////
 	// Getters for private member variables to allow statistics to be fetched programmatically.
 	///////////////////////////////////////////////////////////////////////////////////////////
 	
-	public int getLineCount()
+	public long getLineCount()
 	{
 		return lineCount;
 	}
