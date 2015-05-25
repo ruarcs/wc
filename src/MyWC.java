@@ -71,6 +71,7 @@ public class MyWC {
 		{
 			lines.forEach( line -> {
 				lineCount++;
+				// Split along whitespace to get a Stream of words.
 				Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
 				// We now have the words as a stream of Strings.
 				// For each word now need to count, and see what chars are in it.
@@ -80,6 +81,7 @@ public class MyWC {
 						int countArrayIndex;
 						if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
 						{
+							// If character is a letter then count it and record it.
 							totalLetterCount++;
 							letterCountArrays[ countArrayIndex ]++;
 						}
