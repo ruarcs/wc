@@ -73,16 +73,14 @@ public class MyWC {
 		
 		try( Stream<String> lines = Files.lines( file.toPath() ) )
 		{
-			lineCount = lines.count();	
 			lines.forEach( line -> {
+				lineCount++;
 				Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
 				// We now have the words as a stream of Strings.
 				// For each word now need to count, and see what chars are in it.
-				wordCount += words.count();
 				words.forEach( word -> {
-					IntStream chars = word.chars();
-					totalLetterCount += chars.count();
-					chars.forEach( character -> {
+					wordCount++;
+					word.chars().forEach( character -> {
 		        		int countArrayIndex;
 		        		if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
 		        		{

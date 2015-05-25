@@ -32,7 +32,7 @@ public class MyWCTest {
 		writeLines( f, new String[]{ "" } );
 		MyWC wc = new MyWC( f );
 		wc.calculateStatistics();
-		assertThat(wc.getLineCount(), is( 1 ) );
+		assertThat(wc.getLineCount(), is( 1L ) );
 		assertThat(wc.getWordCount(), is( 0 ) );
 		assertThat(wc.getAverageLettersPerWord(), is( 0.0 ) );
 		assertThat(wc.getMostCommonLetters(), is( empty() ) );
@@ -45,7 +45,7 @@ public class MyWCTest {
 		writeLines( f, new String[]{ "The first line" } );
 		MyWC wc = new MyWC( f );
 		wc.calculateStatistics();
-		assertThat(wc.getLineCount(), is( 1 ) );
+		assertThat(wc.getLineCount(), is( 1L ) );
 		assertThat(wc.getWordCount(), is( 3 ) );
 		assertThat(wc.getAverageLettersPerWord(), is( 4.0 ) );
 		assertThat(wc.getMostCommonLetters(), containsInAnyOrder( 't', 'i', 'e' ) );
@@ -60,7 +60,7 @@ public class MyWCTest {
 									 "It was nice knowing you."} );
 		MyWC wc = new MyWC( f );
 		wc.calculateStatistics();
-		assertThat(wc.getLineCount(), is( 3 ) );
+		assertThat(wc.getLineCount(), is( 3L ) );
 		assertThat(wc.getWordCount(), is( 9 ) );
 		assertThat(wc.getAverageLettersPerWord(), is( closeTo( 4.6, ERROR_ALLOWED ) ) );
 		assertThat(wc.getMostCommonLetters(), contains( 'o' ) );
@@ -73,7 +73,7 @@ public class MyWCTest {
 		writeLines( f, new String[]{ "A" } );
 		MyWC wc = new MyWC( f );
 		wc.calculateStatistics();
-		assertThat(wc.getLineCount(), is( 1 ) );
+		assertThat(wc.getLineCount(), is( 1L ) );
 		assertThat(wc.getWordCount(), is( 1 ) );
 		assertThat(wc.getAverageLettersPerWord(), is( 1.0 ) );
 		assertThat(wc.getMostCommonLetters(), contains( 'a' ) );
@@ -87,7 +87,7 @@ public class MyWCTest {
 				                     "%$@##@"} );
 		MyWC wc = new MyWC( f );
 		wc.calculateStatistics();
-		assertThat(wc.getLineCount(), is( 2 ) );
+		assertThat(wc.getLineCount(), is( 2L ) );
 		assertThat(wc.getWordCount(), is( 2 ) );
 		assertThat(wc.getAverageLettersPerWord(), is( 0.0 ) );
 		assertThat(wc.getMostCommonLetters(), is( empty() ) );
@@ -101,7 +101,7 @@ public class MyWCTest {
 				                     "       "} );
 		MyWC wc = new MyWC( f );
 		wc.calculateStatistics();
-		assertThat(wc.getLineCount(), is( 2 ) );
+		assertThat(wc.getLineCount(), is( 2L ) );
 		assertThat(wc.getWordCount(), is( 0 ) );
 		assertThat(wc.getAverageLettersPerWord(), is( 0.0 ) );
 		assertThat(wc.getMostCommonLetters(), is( empty() ) );
@@ -114,7 +114,7 @@ public class MyWCTest {
 		writeLines( f, new String[]{ "hello     there"} );
 		MyWC wc = new MyWC( f );
 		wc.calculateStatistics();
-		assertThat(wc.getLineCount(), is( 1 ) );
+		assertThat(wc.getLineCount(), is( 1L ) );
 		assertThat(wc.getWordCount(), is( 2 ) );
 		assertThat(wc.getAverageLettersPerWord(), is( 5.0 ) );
 		assertThat(wc.getMostCommonLetters(), contains( 'e' ) );
