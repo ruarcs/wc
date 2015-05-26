@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -72,24 +71,24 @@ public class MyWC {
 		try( BufferedReader bufferedReader = new BufferedReader( new FileReader ( file ) ) )
 		{
 				bufferedReader.lines().sequential().forEach( line -> {
-				lineCount++;
-				// Split along whitespace to get a Stream of words.
-				Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
-				// We now have the words as a stream of Strings.
-				// For each word now need to count, and see what chars are in it.
-				words.sequential().forEach( word -> {
-					wordCount++;
-					word.chars().sequential().forEach( character -> {
-						int countArrayIndex;
-						if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
-						{
-							// If character is a letter then count it and record it.
-							totalLetterCount++;
-							letterCountArrays[ countArrayIndex ]++;
-						}
+					lineCount++;
+					// Split along whitespace to get a Stream of words.
+					Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
+					// We now have the words as a stream of Strings.
+					// For each word now need to count, and see what chars are in it.
+					words.sequential().forEach( word -> {
+						wordCount++;
+						word.chars().sequential().forEach( character -> {
+							int countArrayIndex;
+							if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
+							{
+								// If character is a letter then count it and record it.
+								totalLetterCount++;
+								letterCountArrays[ countArrayIndex ]++;
+							}
+						} );
 					} );
 				} );
-			} );
 		}
 		
 		// Calculate the average number of letters (not *characters*) in words.
