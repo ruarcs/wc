@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -67,9 +69,9 @@ public class MyWC {
 	 */
 	public void calculateStatistics() throws FileNotFoundException, IOException
 	{
-		try( Stream<String> lines = Files.lines( file.toPath() ) )
+		try( BufferedReader bufferedReader = new BufferedReader( new FileReader ( file ) ) )
 		{
-			lines.forEach( line -> {
+				bufferedReader.lines().forEach( line -> {
 				lineCount++;
 				// Split along whitespace to get a Stream of words.
 				Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
