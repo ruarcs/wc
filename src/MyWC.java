@@ -71,15 +71,15 @@ public class MyWC {
 	{
 		try( BufferedReader bufferedReader = new BufferedReader( new FileReader ( file ) ) )
 		{
-				bufferedReader.lines().forEach( line -> {
+				bufferedReader.lines().sequential().forEach( line -> {
 				lineCount++;
 				// Split along whitespace to get a Stream of words.
 				Stream<String> words = Pattern.compile( "\\s+" ).splitAsStream( line );
 				// We now have the words as a stream of Strings.
 				// For each word now need to count, and see what chars are in it.
-				words.forEach( word -> {
+				words.sequential().forEach( word -> {
 					wordCount++;
-					word.chars().forEach( character -> {
+					word.chars().sequential().forEach( character -> {
 						int countArrayIndex;
 						if( (countArrayIndex = getCountArrayIndex( (char)character ) ) >= 0 )
 						{
